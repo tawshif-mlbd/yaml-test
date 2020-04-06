@@ -1,0 +1,128 @@
+openapi: 3.0.2
+info:
+  title: NSpec
+  description: "API doc for NSpec"
+  contact:
+    email: cr@nodes.dk
+  version: 1.0.0
+externalDocs:
+  description: View it in NSpec
+  url: https://nspec.like.st/deeplink?org=monstar-lab-group&repo=nspec&path=docs/api-doc.yaml
+servers:
+  - url: https://nspec.like.st/api/
+  - url: https://staging.nspec.like.st/api/
+  - url: http://nspec.test/api/
+
+paths:
+  /github/organizations:
+    get:
+      summary: Index organizations
+      description: Index organizations
+      operationId: organization-index
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Github token
+        - in: query
+          name: organization
+          schema:
+            type: string
+          required: true
+          description: Exact search term for orgaization
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/OrganizationArray'
+            text/plain:
+              schema:
+                type: string
+        401:
+          description: Invalid Github token
+        422:
+          description: Validation exception
+  /github/repositories:
+    get:
+      summary: Index repositories
+      description: Index repositories
+      operationId: repository-index
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Github token
+        - in: query
+          name: owner
+          schema:
+            type: string
+          required: true
+          description: Organization or users
+        - in: query
+          name: repository
+          schema:
+            type: string
+          required: true
+          description: Exact name of repository
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RepositoryArray'
+            text/plain:
+              schema:
+                type: string
+        401:
+          description: Invalid Github token
+        422:
+          description: Validation exception
+
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+          example: MDEyOk9yZ2FuaXphdGlvbjE4MTg1NzM=
+        name:
+          type: string
+          format: string
+          example: monstar-lab-group
+    Repository:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+          example: MDEyOk9yZ2FuaXphdGlvbjE4MTg1NzM=
+        name:
+          type: string
+          format: string
+          example: nspec
+  responses:
+    OrganizationArray:
+      description: List of user organizations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+    RepositoryArray:
+      description: List of user repositories
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
